@@ -12,7 +12,7 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.OpposingGoal, function (sprite, otherSprite) {
-    info.player2.changeScoreBy(1)
+    info.changeScoreBy(1)
     music.rest(music.beat(BeatFraction.Whole))
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -22,7 +22,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player, function (sprite, ot
     possessionFlag = 0
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Goal, function (sprite, otherSprite) {
-    info.changeScoreBy(1)
+    info.player2.changeScoreBy(1)
     music.rest(music.beat(BeatFraction.Whole))
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy2, function (sprite, otherSprite) {
