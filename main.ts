@@ -4,11 +4,29 @@ namespace SpriteKind {
     export const Enemy2 = SpriteKind.create()
     export const OpposingGoal = SpriteKind.create()
 }
+function Ball_Thrown () {
+    xx = randint(-40, -90)
+    basketBallSprite.setVelocity(60, xx)
+    music.rest(music.beat(BeatFraction.Quarter))
+    for (let index = 0; index < 3; index++) {
+        if (possessionFlag == 1) {
+            xx += 2
+            basketBallSprite.setVelocity(basketBallSprite.vx, xx)
+            music.rest(music.beat(BeatFraction.Quarter))
+        }
+    }
+    for (let index = 0; index < 10; index++) {
+        if (possessionFlag == 1) {
+            xx += 20
+            basketBallSprite.setVelocity(basketBallSprite.vx, xx)
+            music.rest(music.beat(BeatFraction.Quarter))
+        }
+    }
+}
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (possessionFlag == 0) {
         possessionFlag = 1
-        basketBallSprite.setVelocity(100, 0)
-        music.rest(music.beat(BeatFraction.Half))
+        Ball_Thrown()
     }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.OpposingGoal, function (sprite, otherSprite) {
@@ -48,10 +66,11 @@ function jump (mySprite: Sprite) {
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     possessionFlag = 4
 })
+let Timer2 = 0
 let timer3 = 0
 let Timer1 = 0
-let Timer2 = 0
 let possessionFlag = 0
+let xx = 0
 let basketBallSprite: Sprite = null
 let playerSprite: Sprite = null
 scene.setBackgroundImage(img`
@@ -324,11 +343,6 @@ forever(function () {
     } else if (possessionFlag == 4) {
         basketBallSprite.setVelocity(0, 0)
         basketBallSprite.setPosition(enemySprite3.x - 7, enemySprite3.y)
-    }
-})
-forever(function () {
-    if (Timer2 == 0) {
-        jump(enemySprite2)
     }
 })
 forever(function () {
