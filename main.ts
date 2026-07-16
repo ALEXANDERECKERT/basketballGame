@@ -5,6 +5,7 @@ namespace SpriteKind {
     export const OpposingGoal = SpriteKind.create()
     export const Floor = SpriteKind.create()
 }
+//
 function Ball_Thrown (num: number) {
     basketBallSprite.setPosition(basketBallSprite.x + 7 * num, basketBallSprite.y)
     xx = randint(-40, -90)
