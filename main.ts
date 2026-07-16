@@ -3,16 +3,20 @@ namespace SpriteKind {
     export const Enemy1 = SpriteKind.create()
     export const Enemy2 = SpriteKind.create()
     export const OpposingGoal = SpriteKind.create()
+    export const Floor = SpriteKind.create()
 }
-function Ball_Thrown () {
+function Ball_Thrown (num: number) {
+    basketBallSprite.setPosition(basketBallSprite.x + 7 * num, basketBallSprite.y)
     xx = randint(-40, -90)
-    basketBallSprite.setVelocity(60, xx)
+    basketBallSprite.setVelocity(60 * num, xx)
     music.rest(music.beat(BeatFraction.Quarter))
     for (let index = 0; index < 3; index++) {
         if (possessionFlag == 1) {
             xx += 2
             basketBallSprite.setVelocity(basketBallSprite.vx, xx)
             music.rest(music.beat(BeatFraction.Quarter))
+        } else {
+            return
         }
     }
     for (let index = 0; index < 10; index++) {
@@ -20,13 +24,15 @@ function Ball_Thrown () {
             xx += 20
             basketBallSprite.setVelocity(basketBallSprite.vx, xx)
             music.rest(music.beat(BeatFraction.Quarter))
+        } else {
+            return
         }
     }
 }
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (possessionFlag == 0) {
         possessionFlag = 1
-        Ball_Thrown()
+        Ball_Thrown(1)
     }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.OpposingGoal, function (sprite, otherSprite) {
@@ -52,11 +58,11 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy1, function (sprite, ot
 function jump (mySprite: Sprite) {
     while (mySprite.y > 50) {
         mySprite.y = mySprite.y - 4
-        if (possessionFlag >= 2 && mySprite.y < 56) {
-            possessionFlag = 1
-            basketBallSprite.setVelocity(-100, 0)
-        }
         music.rest(music.beat(BeatFraction.Sixteenth))
+    }
+    if (possessionFlag >= 2 && basketBallSprite.y < 56) {
+        possessionFlag = 1
+        Ball_Thrown(-1)
     }
     while (mySprite.y < 103) {
         mySprite.y = mySprite.y + 4
@@ -66,8 +72,8 @@ function jump (mySprite: Sprite) {
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     possessionFlag = 4
 })
-let Timer2 = 0
 let timer3 = 0
+let Timer2 = 0
 let Timer1 = 0
 let possessionFlag = 0
 let xx = 0
@@ -195,6 +201,10 @@ scene.setBackgroundImage(img`
     ddddffffffddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddfffffffddd
     dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
     `)
+let myFloor = sprites.create(img`
+    d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d 
+    `, SpriteKind.Floor)
+myFloor.setPosition(67, 120)
 playerSprite = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
@@ -328,8 +338,8 @@ basketBallSprite = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     `, SpriteKind.Projectile)
 basketBallSprite.setPosition(playerSprite.x + 4, playerSprite.y)
-basketBallSprite.setBounceOnWall(true)
 controller.moveSprite(playerSprite, 100, 0)
+basketBallSprite.setBounceOnWall(true)
 forever(function () {
     if (possessionFlag == 0) {
         basketBallSprite.setVelocity(0, 0)
@@ -348,6 +358,11 @@ forever(function () {
 forever(function () {
     if (Timer1 == 0) {
         jump(enemySprite1)
+    }
+})
+forever(function () {
+    if (Timer2 == 0) {
+        jump(enemySprite2)
     }
 })
 forever(function () {
