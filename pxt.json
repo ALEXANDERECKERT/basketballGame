@@ -10,7 +10,11 @@
         "main.ts",
         "README.md",
         "assets.json",
-        "tutorial-info-cache.json"
+        "tutorial-info-cache.json",
+        "tilemap.g.jres",
+        "tilemap.g.ts",
+        "images.g.jres",
+        "images.g.ts"
     ],
     "testFiles": [
         "test.ts"

@@ -4,9 +4,30 @@ namespace SpriteKind {
     export const Enemy2 = SpriteKind.create()
     export const OpposingGoal = SpriteKind.create()
     export const Floor = SpriteKind.create()
+    export const Wall = SpriteKind.create()
 }
-//
+
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (possessionFlag == 0 && (basketBallSprite.x >= 0 && basketBallSprite.x <= 160)) {
+        possessionFlag = 1
+        control.runInParallel(function () {
+            Ball_Thrown(1)
+        })
+    }
+})
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.OpposingGoal, function (sprite, otherSprite) {
+    info.changeScoreBy(1)
+    music.rest(music.beat(BeatFraction.Whole))
+})
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    jump(playerSprite)
+})
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player, function (sprite, otherSprite) {
+    possessionFlag = 0
+})
+
 function Ball_Thrown (num: number) {
+    possessionFlag = 1
     basketBallSprite.setPosition(basketBallSprite.x + 7 * num, basketBallSprite.y)
     xx = randint(-40, -90)
     basketBallSprite.setVelocity(60 * num, xx)
@@ -30,25 +51,16 @@ function Ball_Thrown (num: number) {
         }
     }
 }
-controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (possessionFlag == 0) {
-        possessionFlag = 1
-        Ball_Thrown(1)
-    }
-})
-sprites.onOverlap(SpriteKind.Projectile, SpriteKind.OpposingGoal, function (sprite, otherSprite) {
-    info.changeScoreBy(1)
-    music.rest(music.beat(BeatFraction.Whole))
-})
-controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    jump(playerSprite)
-})
-sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player, function (sprite, otherSprite) {
-    possessionFlag = 0
-})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Goal, function (sprite, otherSprite) {
     info.player2.changeScoreBy(1)
     music.rest(music.beat(BeatFraction.Whole))
+})
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Floor, function (sprite, otherSprite) {
+    sprite.vy = sprite.vy * -0.8
+    music.rest(music.beat(BeatFraction.Half))
+    if (possessionFlag == 1) {
+        sprite.vy = sprite.vy * -1
+    }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy2, function (sprite, otherSprite) {
     possessionFlag = 2
@@ -62,24 +74,29 @@ function jump (mySprite: Sprite) {
         music.rest(music.beat(BeatFraction.Sixteenth))
     }
     if (possessionFlag >= 2 && basketBallSprite.y < 56) {
-        possessionFlag = 1
-        Ball_Thrown(-1)
+        control.runInParallel(function () {
+            Ball_Thrown(-1)
+        })
     }
     while (mySprite.y < 103) {
         mySprite.y = mySprite.y + 4
         music.rest(music.beat(BeatFraction.Sixteenth))
     }
 }
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Wall, function (sprite, otherSprite) {
+    sprite.vx = sprite.vx * -1
+})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     possessionFlag = 4
 })
 let timer3 = 0
 let Timer2 = 0
 let Timer1 = 0
-let possessionFlag = 0
 let xx = 0
+let possessionFlag = 0
 let basketBallSprite: Sprite = null
 let playerSprite: Sprite = null
+let Ball_thrown = 0
 scene.setBackgroundImage(img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
@@ -203,9 +220,13 @@ scene.setBackgroundImage(img`
     dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
     `)
 let myFloor = sprites.create(img`
-    d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d 
+    ddddddddddddddddddddddddddddddd3dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
     `, SpriteKind.Floor)
-myFloor.setPosition(67, 120)
+let myWall2 = sprites.create(assets.image`Wall_R`, SpriteKind.Wall)
+let myWall = sprites.create(assets.image`Wall_R`, SpriteKind.Wall)
+myWall.setPosition(-1, 60)
+myWall2.setPosition(161, 60)
+myFloor.setPosition(-50, 121)
 playerSprite = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
@@ -340,7 +361,6 @@ basketBallSprite = sprites.create(img`
     `, SpriteKind.Projectile)
 basketBallSprite.setPosition(playerSprite.x + 4, playerSprite.y)
 controller.moveSprite(playerSprite, 100, 0)
-basketBallSprite.setBounceOnWall(true)
 forever(function () {
     if (possessionFlag == 0) {
         basketBallSprite.setVelocity(0, 0)
@@ -387,4 +407,7 @@ game.onUpdateInterval(500, function () {
     } else {
         timer3 = timer3 - 1
     }
+})
+game.onUpdateInterval(100, function () {
+	
 })
