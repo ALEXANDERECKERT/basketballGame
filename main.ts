@@ -6,7 +6,6 @@ namespace SpriteKind {
     export const Floor = SpriteKind.create()
     export const Wall = SpriteKind.create()
 }
-
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (possessionFlag == 0 && (basketBallSprite.x >= 0 && basketBallSprite.x <= 160)) {
         possessionFlag = 1
@@ -25,7 +24,6 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player, function (sprite, otherSprite) {
     possessionFlag = 0
 })
-
 function Ball_Thrown (num: number) {
     possessionFlag = 1
     basketBallSprite.setPosition(basketBallSprite.x + 7 * num, basketBallSprite.y)
