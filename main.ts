@@ -222,9 +222,6 @@ let myFloor = sprites.create(img`
     `, SpriteKind.Floor)
 let myWall2 = sprites.create(assets.image`Wall_R`, SpriteKind.Wall)
 let myWall = sprites.create(assets.image`Wall_R`, SpriteKind.Wall)
-myWall.setPosition(-1, 60)
-myWall2.setPosition(161, 60)
-myFloor.setPosition(-50, 121)
 playerSprite = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
@@ -243,6 +240,9 @@ playerSprite = sprites.create(img`
     . . . . . f f . f f . . . . . . 
     . . . . . . . . . . . . . . . . 
     `, SpriteKind.Player)
+myWall.setPosition(-1, 60)
+myWall2.setPosition(161, 60)
+myFloor.setPosition(-50, 121)
 playerSprite.setPosition(19, 103)
 let enemySprite1 = sprites.create(img`
     . . . . . . . . . . . . . . . . 
