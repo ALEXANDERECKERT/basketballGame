@@ -6,7 +6,6 @@ namespace SpriteKind {
     export const Floor = SpriteKind.create()
     export const Wall = SpriteKind.create()
 }
-
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (possessionFlag == 0 && (basketBallSprite.x >= 0 && basketBallSprite.x <= 160)) {
         possessionFlag = 1
@@ -25,7 +24,6 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player, function (sprite, otherSprite) {
     possessionFlag = 0
 })
-
 function Ball_Thrown (num: number) {
     possessionFlag = 1
     basketBallSprite.setPosition(basketBallSprite.x + 7 * num, basketBallSprite.y)
@@ -224,9 +222,6 @@ let myFloor = sprites.create(img`
     `, SpriteKind.Floor)
 let myWall2 = sprites.create(assets.image`Wall_R`, SpriteKind.Wall)
 let myWall = sprites.create(assets.image`Wall_R`, SpriteKind.Wall)
-myWall.setPosition(-1, 60)
-myWall2.setPosition(161, 60)
-myFloor.setPosition(-50, 121)
 playerSprite = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
@@ -245,6 +240,9 @@ playerSprite = sprites.create(img`
     . . . . . f f . f f . . . . . . 
     . . . . . . . . . . . . . . . . 
     `, SpriteKind.Player)
+myWall.setPosition(-1, 60)
+myWall2.setPosition(161, 60)
+myFloor.setPosition(-50, 121)
 playerSprite.setPosition(19, 103)
 let enemySprite1 = sprites.create(img`
     . . . . . . . . . . . . . . . . 
