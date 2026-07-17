@@ -54,10 +54,19 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Goal, function (sprite, othe
     music.rest(music.beat(BeatFraction.Whole))
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Floor, function (sprite, otherSprite) {
-    sprite.vy = sprite.vy * -0.8
-    music.rest(music.beat(BeatFraction.Half))
-    if (possessionFlag == 1) {
+    possessionFlag = 1
+    if (sprite.vy < 10) {
+        sprite.vy = sprite.vy * -0.8
+        music.rest(music.beat(BeatFraction.Half))
+        if (possessionFlag == 1) {
+            sprite.vy = sprite.vy * -1
+        }
+    } else {
         sprite.vy = sprite.vy * -1
+        music.rest(music.beat(BeatFraction.Half))
+        if (possessionFlag == 1) {
+            sprite.vy = sprite.vy * -1
+        }
     }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy2, function (sprite, otherSprite) {
@@ -67,7 +76,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy1, function (sprite, ot
     possessionFlag = 3
 })
 function jump (mySprite: Sprite) {
-    while (mySprite.y > 50) {
+    while (mySprite.y > 40) {
         mySprite.y = mySprite.y - 4
         music.rest(music.beat(BeatFraction.Sixteenth))
     }
@@ -218,7 +227,7 @@ scene.setBackgroundImage(img`
     dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
     `)
 let myFloor = sprites.create(img`
-    ddddddddddddddddddddddddddddddd3dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+    dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
     `, SpriteKind.Floor)
 let myWall2 = sprites.create(assets.image`Wall_R`, SpriteKind.Wall)
 let myWall = sprites.create(assets.image`Wall_R`, SpriteKind.Wall)
@@ -242,7 +251,7 @@ playerSprite = sprites.create(img`
     `, SpriteKind.Player)
 myWall.setPosition(-1, 60)
 myWall2.setPosition(161, 60)
-myFloor.setPosition(-50, 121)
+myFloor.setPosition(0, 120)
 playerSprite.setPosition(19, 103)
 let enemySprite1 = sprites.create(img`
     . . . . . . . . . . . . . . . . 
