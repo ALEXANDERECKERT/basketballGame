@@ -406,6 +406,3 @@ game.onUpdateInterval(500, function () {
         timer3 = timer3 - 1
     }
 })
-game.onUpdateInterval(100, function () {
-	
-})
